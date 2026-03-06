@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { loadFaceModels, getFaceDescriptor, matchFace } from "@/lib/faceApi";
 import { toast } from "sonner";
 import StudentCard from "./StudentCard";
-import { Camera, Loader2, ScanFace, CameraOff } from "lucide-react";
+import { Camera, Loader2, ScanFace, CameraOff, FlipHorizontal } from "lucide-react";
 
 interface FaceRecognitionMarkerProps {
   type: AttendanceType;
@@ -24,6 +24,7 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
   const [storedDescriptors, setStoredDescriptors] = useState<StoredDescriptor[]>([]);
   const [matchedStudent, setMatchedStudent] = useState<ReturnType<typeof findStudent>>(undefined);
   const [marking, setMarking] = useState(false);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -53,10 +54,12 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
     fetchDescriptors();
   }, [type]);
 
-  const startCamera = useCallback(async () => {
+  const startCamera = useCallback(async (mode: "user" | "environment" = "user") => {
     try {
+      // Stop existing stream first
+      streamRef.current?.getTracks().forEach((t) => t.stop());
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
+        video: { facingMode: mode, width: { ideal: 640 }, height: { ideal: 480 } },
       });
       streamRef.current = stream;
       if (videoRef.current) {
@@ -68,6 +71,12 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
       toast.error("Could not access camera");
     }
   }, []);
+
+  const flipCamera = useCallback(() => {
+    const nextMode = facingMode === "user" ? "environment" : "user";
+    setFacingMode(nextMode);
+    startCamera(nextMode);
+  }, [facingMode, startCamera]);
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -148,7 +157,7 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
         {!cameraActive && (
           <div className="absolute inset-0 flex items-center justify-center">
             <button
-              onClick={startCamera}
+              onClick={() => startCamera(facingMode)}
               className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold"
             >
               <Camera className="w-5 h-5" /> Open Camera
@@ -171,8 +180,15 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
             )}
           </button>
           <button
+            onClick={flipCamera}
+            title="Flip Camera"
+            className="px-3 py-3 rounded-xl border text-muted-foreground hover:bg-muted/50 transition-colors"
+          >
+            <FlipHorizontal className="w-4 h-4" />
+          </button>
+          <button
             onClick={stopCamera}
-            className="px-4 py-3 rounded-xl border text-muted-foreground text-sm font-medium"
+            className="px-3 py-3 rounded-xl border text-muted-foreground text-sm font-medium"
           >
             <CameraOff className="w-4 h-4" />
           </button>

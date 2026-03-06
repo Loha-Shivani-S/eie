@@ -161,7 +161,6 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
         roll_no: student.rollNo,
         type: dbType,
         hour,
-        marked_by: user?.id,
       });
       if (error) {
         return { success: false, message: `Error: ${error.message}` };
