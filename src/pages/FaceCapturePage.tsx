@@ -79,6 +79,13 @@ const FaceCapturePage: React.FC = () => {
     setCameraActive(false);
   }, []);
 
+  useEffect(() => {
+    if (cameraActive && streamRef.current && videoRef.current && !videoRef.current.srcObject) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(e => console.error("Error playing restored video stream:", e));
+    }
+  }, [selectedStudent, cameraActive]);
+
   useEffect(() => () => stopCamera(), [stopCamera]);
 
   const handleSearch = () => {
