@@ -30,6 +30,11 @@ const ADMINS: Record<string, { password: string; name: string; id: string }> = {
     name: "Rishikeshwaran",
     id: "22222222-2222-2222-2222-222222222222",
   },
+  "calibrix2026@gmail.com": {
+    password: "Calibrix2026",
+    name: "Calibrix Admin",
+    id: "33333333-3333-3333-3333-333333333333",
+  },
 };
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
