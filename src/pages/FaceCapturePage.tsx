@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAttendance, AttendanceType } from "@/lib/attendanceContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/authContext";
-import { loadFaceModels, getFaceDescriptor } from "@/lib/faceApi";
+import { loadFaceModels, getFaceDescriptor, matchFace } from "@/lib/faceApi";
 import { toast } from "sonner";
 import { Student } from "@/lib/mockData";
 import { Camera, CheckCircle2, Loader2, Search, RefreshCw, Users, UserCheck, FlipHorizontal } from "lucide-react";
@@ -18,6 +18,7 @@ const FaceCapturePage: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [capturing, setCapturing] = useState(false);
   const [capturedRolls, setCapturedRolls] = useState<Set<string>>(new Set());
+  const [storedDescriptors, setStoredDescriptors] = useState<{rollNo: string, descriptor: Float32Array}[]>([]);
   const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -34,15 +35,23 @@ const FaceCapturePage: React.FC = () => {
       });
   }, []);
 
-  // Fetch already captured roll numbers
+  // Fetch already captured roll numbers and descriptors for duplication check
   useEffect(() => {
     const fetchCaptured = async () => {
+      const dbType = type === "participants" ? "participant" : "volunteer";
       const { data } = await supabase
         .from("face_descriptors")
-        .select("roll_no")
-        .eq("type", type === "participants" ? "participant" : "volunteer");
+        .select("roll_no, descriptor")
+        .eq("type", dbType);
+        
       if (data) {
         setCapturedRolls(new Set(data.map((d: any) => d.roll_no.toLowerCase())));
+        setStoredDescriptors(
+          data.map((d: any) => ({
+            rollNo: d.roll_no,
+            descriptor: new Float32Array(d.descriptor as number[]),
+          }))
+        );
       }
     };
     fetchCaptured();
@@ -112,6 +121,17 @@ const FaceCapturePage: React.FC = () => {
         return;
       }
 
+      // --- DUPLICATION PREVENTION CHECK ---
+      const match = matchFace(descriptor, storedDescriptors, 0.5);
+      if (match && match.rollNo.toUpperCase() !== selectedStudent.rollNo.toUpperCase()) {
+        const existingStudent = findStudent(type, match.rollNo);
+        const nameStr = existingStudent ? `${existingStudent.name} (${match.rollNo})` : match.rollNo;
+        toast.error(`This face is already registered to ${nameStr}! Cannot use same face for multiple people.`);
+        setCapturing(false);
+        return;
+      }
+      // ------------------------------------
+
       const dbType = type === "participants" ? "participant" : "volunteer";
       const descriptorArray = Array.from(descriptor);
 
@@ -128,7 +148,14 @@ const FaceCapturePage: React.FC = () => {
         toast.error(`Error saving: ${error.message}`);
       } else {
         toast.success(`Face captured for ${selectedStudent.name} (${selectedStudent.rollNo})`);
+        
+        // Optimistically update caches
         setCapturedRolls((prev) => new Set(prev).add(selectedStudent.rollNo.toLowerCase()));
+        setStoredDescriptors(prev => [
+          ...prev.filter(d => d.rollNo.toUpperCase() !== selectedStudent.rollNo.toUpperCase()),
+          { rollNo: selectedStudent.rollNo, descriptor }
+        ]);
+
         setSelectedStudent(null);
         setRollNoInput("");
       }
