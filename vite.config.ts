@@ -4,7 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/eie/",
+  // Vercel uses root deployments, so base must be "/". GitHub pages uses "/eie/"
+  base: process.env.VERCEL ? "/" : "/eie/",
   server: {
     host: "::",
     port: 8080,
