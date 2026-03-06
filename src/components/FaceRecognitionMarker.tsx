@@ -153,7 +153,28 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
       </div>
 
       <div className="relative rounded-xl overflow-hidden bg-muted aspect-[4/3]">
-        <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
+        <video 
+          ref={videoRef} 
+          className={`w-full h-full object-cover ${facingMode === "user" ? "scale-x-[-1]" : ""}`} 
+          playsInline 
+          muted 
+        />
+        
+        {/* Face Guide Overlay */}
+        {cameraActive && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="relative w-[60%] h-[70%] max-w-[250px] max-h-[350px]">
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <ellipse cx="50" cy="50" rx="45" ry="48" fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1" strokeDasharray="4 4" />
+                <ellipse cx="50" cy="50" rx="45" ry="48" fill="none" stroke="rgba(255, 255, 255, 0.8)" strokeWidth="0.5" />
+              </svg>
+              <div className="absolute -bottom-8 left-0 right-0 text-center">
+                <span className="text-white/90 text-xs font-medium bg-black/40 px-2 py-1 rounded backdrop-blur-sm">Align face here</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {!cameraActive && (
           <div className="absolute inset-0 flex items-center justify-center">
             <button
