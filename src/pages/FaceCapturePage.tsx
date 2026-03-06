@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/authContext";
 import { loadFaceModels, getFaceDescriptor } from "@/lib/faceApi";
 import { toast } from "sonner";
 import { Student } from "@/lib/mockData";
-import { Camera, CheckCircle2, Loader2, Search, RefreshCw, Users, UserCheck, FlipHorizontal } from "lucide-react";
+import { Camera, CheckCircle2, Loader2, Search, RefreshCw, Users, UserCheck } from "lucide-react";
 
 const FaceCapturePage: React.FC = () => {
   const { getStudentList, findStudent } = useAttendance();
@@ -18,7 +18,6 @@ const FaceCapturePage: React.FC = () => {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [capturing, setCapturing] = useState(false);
   const [capturedRolls, setCapturedRolls] = useState<Set<string>>(new Set());
-  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -48,12 +47,10 @@ const FaceCapturePage: React.FC = () => {
     fetchCaptured();
   }, [type]);
 
-  const startCamera = useCallback(async (mode: "user" | "environment" = "user") => {
+  const startCamera = useCallback(async () => {
     try {
-      // Stop existing stream first
-      streamRef.current?.getTracks().forEach((t) => t.stop());
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: mode, width: { ideal: 640 }, height: { ideal: 480 } },
+        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } },
       });
       streamRef.current = stream;
       if (videoRef.current) {
@@ -66,12 +63,6 @@ const FaceCapturePage: React.FC = () => {
     }
   }, []);
 
-  const flipCamera = useCallback(() => {
-    const nextMode = facingMode === "user" ? "environment" : "user";
-    setFacingMode(nextMode);
-    startCamera(nextMode);
-  }, [facingMode, startCamera]);
-
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
@@ -83,6 +74,7 @@ const FaceCapturePage: React.FC = () => {
 
   const handleSearch = () => {
     if (!rollNoInput.trim()) return;
+    setCapturing(false);
     const student = findStudent(type, rollNoInput.trim());
     if (student) {
       setSelectedStudent(student);
@@ -144,17 +136,15 @@ const FaceCapturePage: React.FC = () => {
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={() => { setType("participants"); setSelectedStudent(null); }}
-          className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
-            type === "participants" ? "bg-primary text-primary-foreground" : "bg-card border text-muted-foreground"
-          }`}
+          className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${type === "participants" ? "bg-primary text-primary-foreground" : "bg-card border text-muted-foreground"
+            }`}
         >
           <Users className="w-4 h-4" /> Participants
         </button>
         <button
           onClick={() => { setType("volunteers"); setSelectedStudent(null); }}
-          className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
-            type === "volunteers" ? "bg-primary text-primary-foreground" : "bg-card border text-muted-foreground"
-          }`}
+          className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${type === "volunteers" ? "bg-primary text-primary-foreground" : "bg-card border text-muted-foreground"
+            }`}
         >
           <UserCheck className="w-4 h-4" /> Volunteers
         </button>
@@ -223,7 +213,7 @@ const FaceCapturePage: React.FC = () => {
                 {!cameraActive && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <button
-                      onClick={() => startCamera(facingMode)}
+                      onClick={startCamera}
                       className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold"
                     >
                       <Camera className="w-5 h-5" /> Open Camera
@@ -246,15 +236,8 @@ const FaceCapturePage: React.FC = () => {
                     )}
                   </button>
                   <button
-                    onClick={flipCamera}
-                    title="Flip Camera"
-                    className="px-3 py-3 rounded-xl border text-muted-foreground hover:bg-muted/50 transition-colors"
-                  >
-                    <FlipHorizontal className="w-4 h-4" />
-                  </button>
-                  <button
                     onClick={stopCamera}
-                    className="px-3 py-3 rounded-xl border text-muted-foreground text-sm font-medium"
+                    className="px-4 py-3 rounded-xl border text-muted-foreground text-sm font-medium"
                   >
                     Close
                   </button>
@@ -274,10 +257,9 @@ const FaceCapturePage: React.FC = () => {
                 return (
                   <button
                     key={s.rollNo}
-                    onClick={() => { setSelectedStudent(s); setRollNoInput(s.rollNo); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
-                      selectedStudent?.rollNo === s.rollNo ? "bg-primary/10 border border-primary/30" : "bg-card border hover:bg-muted/50"
-                    }`}
+                    onClick={() => { setSelectedStudent(s); setRollNoInput(s.rollNo); setCapturing(false); }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${selectedStudent?.rollNo === s.rollNo ? "bg-primary/10 border border-primary/30" : "bg-card border hover:bg-muted/50"
+                      }`}
                   >
                     <div className={`w-2 h-2 rounded-full shrink-0 ${captured ? "bg-primary" : "bg-muted-foreground/30"}`} />
                     <div className="flex-1 min-w-0">

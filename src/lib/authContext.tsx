@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     // Check local storage for existing session
-    const storedUser = localStorage.getItem("hackathon_admin_user");
+    const storedUser = sessionStorage.getItem("hackathon_admin_user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
@@ -60,10 +60,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           });
           setIsAdmin(true);
         } else {
-          localStorage.removeItem("hackathon_admin_user");
+          sessionStorage.removeItem("hackathon_admin_user");
         }
       } catch (e) {
-        localStorage.removeItem("hackathon_admin_user");
+        sessionStorage.removeItem("hackathon_admin_user");
       }
     }
     setLoading(false);
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setSession(mockSession);
       setIsAdmin(true);
       
-      localStorage.setItem("hackathon_admin_user", JSON.stringify(mockUser));
+      sessionStorage.setItem("hackathon_admin_user", JSON.stringify(mockUser));
       
       return { error: null };
     }
@@ -107,7 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     setSession(null);
     setIsAdmin(false);
-    localStorage.removeItem("hackathon_admin_user");
+    sessionStorage.removeItem("hackathon_admin_user");
   };
 
   return (
