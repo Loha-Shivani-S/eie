@@ -39,8 +39,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Pure memory auth: do not load anything from storage
-    // User is forced to login on every page load/refresh
+    // Check session storage for existing session
+    const storedUser = sessionStorage.getItem("hackathon_admin_user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const adminConfig = ADMINS[parsedUser.email];
+        if (adminConfig) {
+          // Ensure we use the latest valid UUID even if an old ID was stored
+          parsedUser.id = adminConfig.id;
+          setUser(parsedUser as User);
+          // Create a mock session
+          setSession({
+            user: parsedUser as User,
+            access_token: "mock-token",
+            refresh_token: "mock-refresh",
+            expires_in: 3600,
+            expires_at: Math.floor(Date.now() / 1000) + 3600,
+            token_type: "bearer",
+          });
+          setIsAdmin(true);
+        } else {
+          sessionStorage.removeItem("hackathon_admin_user");
+        }
+      } catch (e) {
+        sessionStorage.removeItem("hackathon_admin_user");
+      }
+    }
     setLoading(false);
   }, []);
 
@@ -70,6 +95,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setSession(mockSession);
       setIsAdmin(true);
       
+      sessionStorage.setItem("hackathon_admin_user", JSON.stringify(mockUser));
+      
       return { error: null };
     }
     
@@ -80,6 +107,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     setSession(null);
     setIsAdmin(false);
+    sessionStorage.removeItem("hackathon_admin_user");
   };
 
   return (
