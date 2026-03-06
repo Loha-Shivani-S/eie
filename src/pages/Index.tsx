@@ -14,7 +14,7 @@ const Index: React.FC = () => {
   return (
     <div className="px-3 sm:px-6 py-6 space-y-6 max-w-screen-xl mx-auto">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight font-display">KEC // HACKATHON</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight font-display">CALIBRIX</h1>
         <p className="text-sm text-muted-foreground">
           Kongu Engineering College — EIE Department
         </p>

@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="flex items-center justify-between px-3 h-14">
         <Link to="/" className="font-display text-sm font-bold text-primary shrink-0 tracking-tight">
-          KEC//HACKATHON
+          CALIBRIX
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

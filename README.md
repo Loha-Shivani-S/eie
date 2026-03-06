@@ -1,4 +1,4 @@
-# KEC Hackathon Attendance System
+# CALIBRIX Attendance System
 
 A digital attendance system built for the KEC Electronics & Instrumentation Engineering department hackathon.
 

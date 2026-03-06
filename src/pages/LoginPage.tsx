@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-primary font-display tracking-tight">
-            KEC // HACKATHON
+            CALIBRIX
           </h1>
           <p className="text-xs text-muted-foreground">
             Kongu Engineering College — EIE Department
