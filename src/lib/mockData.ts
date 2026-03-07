@@ -149,11 +149,7 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "24EIR018", name: "Dhakshana R", phoneNumber: "9600417024", department: "EIE", year: "II" },
   { rollNo: "24EIR032", name: "Gokul Nandha S", phoneNumber: "9629817427", department: "EIE", year: "II" },
 
-  // 25.
-  { rollNo: "24EIR023", name: "DHARSHANA PRIYA V", phoneNumber: "9384519602", department: "EIE", year: "II" },
-  { rollNo: "24EIR052", name: "KIRUTHIKHA M", phoneNumber: "8903585428", department: "EIE", year: "II" },
-  { rollNo: "24EIR013", name: "BHARANEDHARAN", phoneNumber: "9344812067", department: "EIE", year: "II" },
-  { rollNo: "24EIR030", name: "GIRIPRAKASH", phoneNumber: "9943930225", department: "EIE", year: "II" },
+  // 26.
 
   // 26.
   { rollNo: "24EIR037", name: "Hariharan S", phoneNumber: "7402799516", department: "EIE", year: "II" },
