@@ -118,6 +118,7 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "25CSR096", name: "Hashwanth G", phoneNumber: "6380233707", department: "CSE", year: "I", teamName: "NOUVEAU" },
   { rollNo: "25CSR084", name: "Harini R", phoneNumber: "9486588210", department: "CSE", year: "I", teamName: "NOUVEAU" },
   { rollNo: "25EER082", name: "Pooja Sri", phoneNumber: "9944724449", department: "EEE", year: "I", teamName: "NOUVEAU" },
+  { rollNo: "24CSR246", name: "Rnny Hamilton M", phoneNumber: "7892325259", department: "CSE", year: "II", teamName: "NOUVEAU" },
 
   // 20. THE TACT COOL
   { rollNo: "23CDR126", name: "Pridhega C", phoneNumber: "9994015901", department: "CSD", year: "III", teamName: "THE TACT COOL" },
