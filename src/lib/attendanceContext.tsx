@@ -25,6 +25,8 @@ interface AttendanceContextType {
   currentHour: number;
   setCurrentHour: (h: number) => void;
   hackathonDate: string;
+  hourSchedule: typeof HOUR_SCHEDULE;
+  getHourDetails: (hour: number) => { date: string; time: string };
   loading: boolean;
   refreshRecords: () => Promise<void>;
   hasFaceRegistered: (rollNo: string) => boolean;
@@ -38,8 +40,21 @@ export const useAttendance = () => {
   return ctx;
 };
 
-const ALL_HOURS = Array.from({ length: 12 }, (_, i) => i + 1);
-const HACKATHON_DATE = "2025-03-12";
+const ALL_HOURS = Array.from({ length: 10 }, (_, i) => i + 1);
+const HACKATHON_DATE = "12 - 13 Mar 2026";
+
+export const HOUR_SCHEDULE: Record<number, { date: string; time: string }> = {
+  1: { date: "12 Mar 2026", time: "9:00 AM" },
+  2: { date: "12 Mar 2026", time: "9:30 AM" },
+  3: { date: "12 Mar 2026", time: "10:45 AM" },
+  4: { date: "12 Mar 2026", time: "1:25 PM" },
+  5: { date: "12 Mar 2026", time: "4:30 PM" },
+  6: { date: "12 Mar 2026", time: "8:30 PM" },
+  7: { date: "12 Mar 2026", time: "10:45 PM" },
+  8: { date: "13 Mar 2026", time: "12:00 AM" },
+  9: { date: "13 Mar 2026", time: "6:00 AM" },
+  10: { date: "13 Mar 2026", time: "8:30 AM" },
+};
 
 export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user } = useAuth();
@@ -232,6 +247,10 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     return faceRegisteredRolls.has(rollNo.toLowerCase());
   }, [faceRegisteredRolls]);
 
+    const getHourDetails = useCallback((hour: number) => {
+    return HOUR_SCHEDULE[hour] || { date: HACKATHON_DATE, time: `Hour ${hour}` };
+  }, []);
+
   return (
     <AttendanceContext.Provider
       value={{
@@ -247,6 +266,8 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
         currentHour,
         setCurrentHour,
         hackathonDate: HACKATHON_DATE,
+        hourSchedule: HOUR_SCHEDULE,
+        getHourDetails,
         loading,
         refreshRecords: fetchRecords,
         hasFaceRegistered,

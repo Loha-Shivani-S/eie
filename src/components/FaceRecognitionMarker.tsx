@@ -16,7 +16,8 @@ interface StoredDescriptor {
 }
 
 const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) => {
-  const { findStudent, markPresent, isPresent, currentHour, hasFaceRegistered } = useAttendance();
+  const { findStudent, markPresent, isPresent, currentHour, hasFaceRegistered, getHourDetails } = useAttendance();
+  const hourDetails = getHourDetails(currentHour);
   const [modelsReady, setModelsReady] = useState(false);
   const [loadingModels, setLoadingModels] = useState(true);
   const [cameraActive, setCameraActive] = useState(false);
@@ -161,6 +162,9 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground bg-primary/5 px-2 py-1 rounded">
+          {hourDetails.time} • {hourDetails.date}
+        </p>
         <p className="text-xs text-muted-foreground">
           {storedDescriptors.length} face(s) in database
         </p>

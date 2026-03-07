@@ -8,7 +8,7 @@ interface HourlyAttendanceTableProps {
 }
 
 const HourlyAttendanceTable: React.FC<HourlyAttendanceTableProps> = ({ type }) => {
-  const { getStudentList, isPresent, hours, markPresent, unmarkPresent, hasFaceRegistered } = useAttendance();
+  const { getStudentList, isPresent, hours, markPresent, unmarkPresent, hasFaceRegistered, getHourDetails } = useAttendance();
   const students = getStudentList(type);
 
   const handleToggle = async (rollNo: string, hour: number, currentlyPresent: boolean) => {
@@ -31,11 +31,16 @@ const HourlyAttendanceTable: React.FC<HourlyAttendanceTableProps> = ({ type }) =
             <th className="text-left p-2.5 font-semibold text-card-foreground sticky left-0 bg-primary/5 z-10 text-xs">#</th>
             <th className="text-left p-2.5 font-semibold text-card-foreground sticky left-8 bg-primary/5 z-10 text-xs min-w-[120px]">Name</th>
             <th className="text-left p-2.5 font-semibold text-card-foreground text-xs">Roll No</th>
-            {hours.map((h) => (
-              <th key={h} className="text-center p-2.5 font-semibold text-card-foreground min-w-[48px] text-xs">
-                H{h}
-              </th>
-            ))}
+              {hours.map((h) => {
+                const details = getHourDetails(h);
+                return (
+                  <th key={h} className="text-center p-2.5 font-semibold text-card-foreground min-w-[70px] text-[10px] leading-tight">
+                    H{h}<br />
+                    <span className="text-muted-foreground font-normal whitespace-nowrap">{details.time}</span><br />
+                    <span className="text-muted-foreground font-normal text-[9px]">{details.date.split(' ')[0]} {details.date.split(' ')[1]}</span>
+                  </th>
+                );
+              })}
           </tr>
         </thead>
         <tbody>

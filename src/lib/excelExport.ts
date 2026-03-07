@@ -1,19 +1,18 @@
 import * as XLSX from "xlsx";
 import { Student } from "./mockData";
-import { AttendanceType } from "./attendanceContext";
+import { AttendanceType, HOUR_SCHEDULE } from "./attendanceContext";
 
 interface ExportOptions {
   type: AttendanceType;
   hour: number;
   presentList: Student[];
   absentList: Student[];
-  hackathonDate: string;
-  attendanceTime: string;
 }
 
 export function exportAttendanceToExcel(options: ExportOptions) {
-  const { type, hour, presentList, absentList, hackathonDate, attendanceTime } = options;
+  const { type, hour, presentList, absentList } = options;
   const typeLabel = type === "participants" ? "PARTICIPANTS" : "VOLUNTEERS / CLUB MEMBERS";
+  const schedule = HOUR_SCHEDULE[hour] || { date: "Unknown Date", time: `Hour ${hour}` };
 
   const wb = XLSX.utils.book_new();
 
@@ -29,8 +28,8 @@ export function exportAttendanceToExcel(options: ExportOptions) {
     ["KONGU ENGINEERING COLLEGE"],
     ["HACKATHON"],
     ["ELECTRONICS AND INSTRUMENTATION DEPARTMENT"],
-    [`${hackathonDate}`],
-    [`${attendanceTime}`],
+    [`Date: ${schedule.date}`],
+    [`Time: ${schedule.time}`],
     [],
     [`${typeLabel} - PRESENT LIST`],
     [],
@@ -54,8 +53,8 @@ export function exportAttendanceToExcel(options: ExportOptions) {
     ["KONGU ENGINEERING COLLEGE"],
     ["HACKATHON"],
     ["ELECTRONICS AND INSTRUMENTATION DEPARTMENT"],
-    [`${hackathonDate}`],
-    [`${attendanceTime}`],
+    [`Date: ${schedule.date}`],
+    [`Time: ${schedule.time}`],
     [],
     [`${typeLabel} - ABSENTEES LIST`],
     [],
@@ -83,6 +82,7 @@ export function exportAllHoursToExcel(
   hours.forEach((hour) => {
     const present = getPresentList(type, hour);
     const absent = getAbsentList(type, hour);
+    const schedule = HOUR_SCHEDULE[hour] || { date: hackathonDate, time: `Hour ${hour}` };
 
     const presentData = present.map((s, i) => [i + 1, s.name, s.rollNo, s.phoneNumber]);
     const absentData = absent.map((s, i) => [i + 1, s.name, s.rollNo, s.phoneNumber]);
@@ -91,8 +91,8 @@ export function exportAllHoursToExcel(
       ["KONGU ENGINEERING COLLEGE"],
       ["HACKATHON"],
       ["ELECTRONICS AND INSTRUMENTATION DEPARTMENT"],
-      [`${hackathonDate}`],
-      [`Time: Hour ${hour}`],
+      [`Date: ${schedule.date}`],
+      [`Time: ${schedule.time}`],
       [],
       [`${typeLabel} - ATTENDANCE REPORT`],
       [],

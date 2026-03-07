@@ -10,7 +10,8 @@ interface AttendanceMarkerProps {
 }
 
 const AttendanceMarker: React.FC<AttendanceMarkerProps> = ({ type }) => {
-  const { findStudent, markPresent, isPresent, currentHour, hasFaceRegistered } = useAttendance();
+  const { findStudent, markPresent, isPresent, currentHour, hasFaceRegistered, getHourDetails } = useAttendance();
+  const hourDetails = getHourDetails(currentHour);
   const [rollNoInput, setRollNoInput] = useState("");
   const [foundStudent, setFoundStudent] = useState<Student | null>(null);
   const [marking, setMarking] = useState(false);
@@ -45,6 +46,9 @@ const AttendanceMarker: React.FC<AttendanceMarkerProps> = ({ type }) => {
 
   return (
     <div className="space-y-4">
+      <p className="text-xs text-muted-foreground bg-primary/5 p-2 rounded-lg inline-block">
+        Marking for: <span className="font-semibold text-primary">{hourDetails.time}</span> ({hourDetails.date})
+      </p>
       <div className="space-y-3">
         <div className="flex gap-2">
           <div className="relative flex-1">

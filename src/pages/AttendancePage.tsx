@@ -11,8 +11,9 @@ interface AttendancePageProps {
 }
 
 const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
-  const { getPresentList, getAbsentList, currentHour, hours, hackathonDate } = useAttendance();
+  const { getPresentList, getAbsentList, currentHour, hours, hackathonDate, getHourDetails } = useAttendance();
   const [mode, setMode] = useState<"manual" | "face">("manual");
+  const hourDetails = getHourDetails(currentHour);
   const title = type === "participants" ? "Participants" : "Volunteers";
   const presentCount = getPresentList(type, currentHour).length;
   const absentCount = getAbsentList(type, currentHour).length;
@@ -25,8 +26,6 @@ const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
       hour: currentHour,
       presentList: getPresentList(type, currentHour),
       absentList: getAbsentList(type, currentHour),
-      hackathonDate,
-      attendanceTime: timeStr,
     });
   };
 
@@ -40,7 +39,7 @@ const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
         <h1 className="text-xl sm:text-2xl font-bold text-primary font-display">{title} Attendance</h1>
         <div className="flex items-center gap-3 text-sm">
           <span className="px-3 py-1 rounded-full bg-primary/10 text-primary font-semibold">
-            Hour {currentHour}
+            Hour {currentHour} • {hourDetails.time} ({hourDetails.date})
           </span>
           <span className="text-success font-medium">{presentCount} present</span>
           <span className="text-destructive font-medium">{absentCount} absent</span>
@@ -68,7 +67,7 @@ const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
         {/* Mode toggle */}
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-card-foreground font-display text-base">
-            Mark Attendance — Hour {currentHour}
+            Mark Attendance — Hour {currentHour} ({hourDetails.time})
           </h2>
           <div className="flex gap-1 bg-muted rounded-lg p-0.5">
             <button
