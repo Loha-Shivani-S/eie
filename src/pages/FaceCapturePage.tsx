@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAttendance, AttendanceType } from "@/lib/attendanceContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/authContext";
-import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD } from "@/lib/faceApi";
+import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD, checkLightingCondition } from "@/lib/faceApi";
 import { toast } from "sonner";
 import { Student } from "@/lib/mockData";
 import { Camera, CheckCircle2, Loader2, Search, RefreshCw, Users, UserCheck, FlipHorizontal } from "lucide-react";
@@ -114,7 +114,21 @@ const FaceCapturePage: React.FC = () => {
     setCapturing(true);
 
     try {
-      const descriptor = await getFaceDescriptor(videoRef.current);
+      // 1. Check lighting
+      const lighting = checkLightingCondition(videoRef.current);
+      if (lighting.isPoor) {
+        toast.warning("Poor lighting detected. Please move to a brighter area for better accuracy.");
+      }
+
+      // 2. Get descriptor and check for multiple faces
+      const { descriptor, error } = await getFaceDescriptor(videoRef.current);
+      
+      if (error) {
+        toast.error(error); // Error: "Multiple faces detected"
+        setCapturing(false);
+        return;
+      }
+
       if (!descriptor) {
         toast.error("No face detected. Please position your face clearly in the camera.");
         setCapturing(false);
@@ -133,19 +147,19 @@ const FaceCapturePage: React.FC = () => {
       // ------------------------------------
 
       const dbType = type === "participants" ? "participant" : "volunteer";
-      const descriptorArray = Array.from(descriptor);
+      const descriptorArray = Array.from(descriptor as Float32Array);
 
-      const { error } = await supabase.from("face_descriptors").upsert(
+      const { error: saveError } = await supabase.from("face_descriptors").upsert(
         {
           roll_no: selectedStudent.rollNo,
           type: dbType,
-          descriptor: descriptorArray,
+          descriptor: descriptorArray as any,
         },
         { onConflict: "roll_no,type" }
       );
 
-      if (error) {
-        toast.error(`Error saving: ${error.message}`);
+      if (saveError) {
+        toast.error(`Error saving: ${saveError.message}`);
       } else {
         toast.success(`Face captured for ${selectedStudent.name} (${selectedStudent.rollNo})`);
         
@@ -153,7 +167,7 @@ const FaceCapturePage: React.FC = () => {
         setCapturedRolls((prev) => new Set(prev).add(selectedStudent.rollNo.toLowerCase()));
         setStoredDescriptors(prev => [
           ...prev.filter(d => d.rollNo.toUpperCase() !== selectedStudent.rollNo.toUpperCase()),
-          { rollNo: selectedStudent.rollNo, descriptor }
+          { rollNo: selectedStudent.rollNo, descriptor: descriptor as Float32Array }
         ]);
 
         setSelectedStudent(null);

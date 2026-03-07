@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAttendance, AttendanceType } from "@/lib/attendanceContext";
 import { supabase } from "@/integrations/supabase/client";
-import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD } from "@/lib/faceApi";
+import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD, checkLightingCondition } from "@/lib/faceApi";
 import { toast } from "sonner";
 import StudentCard from "./StudentCard";
 import { Camera, Loader2, ScanFace, CameraOff, FlipHorizontal } from "lucide-react";
@@ -98,14 +98,28 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
     setMatchedStudent(undefined);
 
     try {
-      const descriptor = await getFaceDescriptor(videoRef.current);
+      // 1. Check lighting
+      const lighting = checkLightingCondition(videoRef.current);
+      if (lighting.isPoor) {
+        toast.warning("Poor lighting detected. Move to a brighter area.");
+      }
+
+      // 2. Get descriptor and check for multiple faces
+      const { descriptor, error } = await getFaceDescriptor(videoRef.current);
+      
+      if (error) {
+        toast.error(error); // "Multiple faces detected"
+        setScanning(false);
+        return;
+      }
+
       if (!descriptor) {
         toast.error("No face detected. Try again.");
         setScanning(false);
         return;
       }
 
-      const match = matchFace(descriptor, storedDescriptors, FACE_MATCH_THRESHOLD);
+      const match = matchFace(descriptor as Float32Array, storedDescriptors, FACE_MATCH_THRESHOLD);
       if (match) {
         const student = findStudent(type, match.rollNo);
         if (student) {
