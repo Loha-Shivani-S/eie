@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAttendance, AttendanceType } from "@/lib/attendanceContext";
 import { supabase } from "@/integrations/supabase/client";
-import { loadFaceModels, getFaceDescriptor, matchFace } from "@/lib/faceApi";
+import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD } from "@/lib/faceApi";
 import { toast } from "sonner";
 import StudentCard from "./StudentCard";
 import { Camera, Loader2, ScanFace, CameraOff, FlipHorizontal } from "lucide-react";
@@ -105,7 +105,7 @@ const FaceRecognitionMarker: React.FC<FaceRecognitionMarkerProps> = ({ type }) =
         return;
       }
 
-      const match = matchFace(descriptor, storedDescriptors, 0.5);
+      const match = matchFace(descriptor, storedDescriptors, FACE_MATCH_THRESHOLD);
       if (match) {
         const student = findStudent(type, match.rollNo);
         if (student) {

@@ -24,10 +24,12 @@ export const getFaceDescriptor = async (
   return detection?.descriptor ?? null;
 };
 
+export const FACE_MATCH_THRESHOLD = 0.3;
+
 export const matchFace = (
   queryDescriptor: Float32Array,
   storedDescriptors: { rollNo: string; descriptor: Float32Array }[],
-  threshold = 0.5
+  threshold = FACE_MATCH_THRESHOLD
 ): { rollNo: string; distance: number } | null => {
   let bestMatch: { rollNo: string; distance: number } | null = null;
   for (const stored of storedDescriptors) {

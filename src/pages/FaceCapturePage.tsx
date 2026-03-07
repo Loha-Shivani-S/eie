@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useAttendance, AttendanceType } from "@/lib/attendanceContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/authContext";
-import { loadFaceModels, getFaceDescriptor, matchFace } from "@/lib/faceApi";
+import { loadFaceModels, getFaceDescriptor, matchFace, FACE_MATCH_THRESHOLD } from "@/lib/faceApi";
 import { toast } from "sonner";
 import { Student } from "@/lib/mockData";
 import { Camera, CheckCircle2, Loader2, Search, RefreshCw, Users, UserCheck, FlipHorizontal } from "lucide-react";
@@ -122,7 +122,7 @@ const FaceCapturePage: React.FC = () => {
       }
 
       // --- DUPLICATION PREVENTION CHECK ---
-      const match = matchFace(descriptor, storedDescriptors, 0.5);
+      const match = matchFace(descriptor, storedDescriptors, FACE_MATCH_THRESHOLD);
       if (match && match.rollNo.toUpperCase() !== selectedStudent.rollNo.toUpperCase()) {
         const existingStudent = findStudent(type, match.rollNo);
         const nameStr = existingStudent ? `${existingStudent.name} (${match.rollNo})` : match.rollNo;
