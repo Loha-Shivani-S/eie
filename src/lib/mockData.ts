@@ -46,27 +46,27 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "25CSR272", name: "Shreeja Y", phoneNumber: "9342836651", department: "CSE", year: "I", teamName: "BUG SLAYERS" },
   { rollNo: "25CSR273", name: "Simsubha Shri P K", phoneNumber: "7530012748", department: "CSE", year: "I", teamName: "BUG SLAYERS" },
 
-  // 7. SYNTAX SQUAD (was SYNTAX)
+  // 7. SYNTAX SQUAD
   { rollNo: "25ITR135", name: "Sharukesh S R", phoneNumber: "9443289103", department: "IT", year: "I", teamName: "SYNTAX SQUAD" },
   { rollNo: "25ITR142", name: "Sriram Karthik S", phoneNumber: "7904124350", department: "IT", year: "I", teamName: "SYNTAX SQUAD" },
   { rollNo: "25ITR122", name: "Sakeena Nivas S", phoneNumber: "8870246986", department: "IT", year: "I", teamName: "SYNTAX SQUAD" },
   { rollNo: "25ITR174", name: "Vinitha N", phoneNumber: "6379577162", department: "IT", year: "I", teamName: "SYNTAX SQUAD" },
 
   // 8. AURA
-  { rollNo: "23CSR187", name: "Samyutha K", phoneNumber: "8610383132", department: "CSE", year: "III", teamName: "AURA" },
-  { rollNo: "23CSR127", name: "Medhuna P", phoneNumber: "9750931331", department: "CSE", year: "III", teamName: "AURA" },
-  { rollNo: "23CSR128", name: "Megathilagavathy S", phoneNumber: "9677538221", department: "CSE", year: "III", teamName: "AURA" },
+  { rollNo: "23CSR187", name: "Samyutha.K", phoneNumber: "8610383132", department: "CSE", year: "III", teamName: "AURA" },
+  { rollNo: "23CSR127", name: "Medhuna.P", phoneNumber: "9750931331", department: "CSE", year: "III", teamName: "AURA" },
+  { rollNo: "23CSR128", name: "Megathilagavathy.S", phoneNumber: "9677538221", department: "CSE", year: "III", teamName: "AURA" },
 
   // 9. PIXELUS B
   { rollNo: "23ECR064", name: "Guna Chandru T", phoneNumber: "6385330466", department: "ECE", year: "III", teamName: "PIXELUS B" },
-  { rollNo: "23ECR091", name: "Jeevith Ks", phoneNumber: "9487053919", department: "ECE", year: "III", teamName: "PIXELUS B" },
+  { rollNo: "23ECR091", name: "Jeevith KS", phoneNumber: "9487053919", department: "ECE", year: "III", teamName: "PIXELUS B" },
   { rollNo: "23ECR113", name: "Kishanth G", phoneNumber: "9003861547", department: "ECE", year: "III", teamName: "PIXELUS B" },
   { rollNo: "23ITR143", name: "Sanjay G", phoneNumber: "6380974687", department: "IT", year: "III", teamName: "PIXELUS B" },
 
   // 10. AQUA VISION
   { rollNo: "25MER041", name: "Rohith A S", phoneNumber: "9789370164", department: "MECH", year: "I", teamName: "AQUA VISION" },
   { rollNo: "25MER027", name: "Mohammed Yasir S", phoneNumber: "9659655511", department: "MECH", year: "I", teamName: "AQUA VISION" },
-  { rollNo: "25ECR061", name: "Farhaan Sulthana", phoneNumber: "8072726004", department: "ECE", year: "I", teamName: "AQUA VISION" },
+  { rollNo: "25ECR061", name: "Farhaan sulthana", phoneNumber: "8072726004", department: "ECE", year: "I", teamName: "AQUA VISION" },
   { rollNo: "25ECR075", name: "Harini V", phoneNumber: "8946077757", department: "ECE", year: "I", teamName: "AQUA VISION" },
 
   // 11. RUBIX
@@ -82,7 +82,7 @@ export const PARTICIPANTS: Student[] = [
 
   // 13. CORE FOUR
   { rollNo: "25CSR033", name: "Bhauthika V", phoneNumber: "9344720442", department: "CSE", year: "I", teamName: "CORE FOUR" },
-  { rollNo: "25AUR018", name: "Ragha Mruthika M", phoneNumber: "8838994664", department: "AUTO", year: "I", teamName: "CORE FOUR" },
+  { rollNo: "25AUR018", name: "Ragha mruthika M", phoneNumber: "8838994664", department: "AUTO", year: "I", teamName: "CORE FOUR" },
   { rollNo: "25ITR024", name: "Dharanya K", phoneNumber: "9361412480", department: "IT", year: "I", teamName: "CORE FOUR" },
   { rollNo: "25AUR017", name: "Priyadharshika K", phoneNumber: "9003809168", department: "AUTO", year: "I", teamName: "CORE FOUR" },
 
@@ -104,8 +104,8 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "25ADR026", name: "Dharaneesh N", phoneNumber: "9600724949", department: "AI&DS", year: "I", teamName: "HEXA HACKERS" },
 
   // 17. 4 CARD MONTE
-  { rollNo: "25ECR140", name: "Mithin Kumar Natarajan", phoneNumber: "9345383938", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
-  { rollNo: "25ECR185", name: "Rakshith Abinav R", phoneNumber: "9865909403", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
+  { rollNo: "25ECR140", name: "Mithin kumar natarajan", phoneNumber: "9345383938", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
+  { rollNo: "25ECR185", name: "Rakshith abinav R", phoneNumber: "9865909403", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
   { rollNo: "25ECR146", name: "Moheswaran A", phoneNumber: "6369000246", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
   { rollNo: "25ECR177", name: "Preetham M", phoneNumber: "8072055857", department: "ECE", year: "I", teamName: "4 CARD MONTE" },
 
@@ -131,7 +131,7 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "25CSR362", name: "Yuthistan A", phoneNumber: "9150424947", department: "CSE", year: "I", teamName: "MIND STACK" },
   { rollNo: "25CSR352", name: "Vishva D", phoneNumber: "8825477400", department: "CSE", year: "I", teamName: "MIND STACK" },
   { rollNo: "25CSR361", name: "Yogeshwaran M", phoneNumber: "9361450627", department: "CSE", year: "I", teamName: "MIND STACK" },
-  { rollNo: "25CSR308", name: "Sujith Kalyan K", phoneNumber: "9629170669", department: "CSE", year: "I", teamName: "MIND STACK" },
+  { rollNo: "25CSR308", name: "Sujith kalyan K", phoneNumber: "9629170669", department: "CSE", year: "I", teamName: "MIND STACK" },
 
   // 22. BRAIN BYTES
   { rollNo: "25CDR077", name: "Riswan M", phoneNumber: "9043233234", department: "CSD", year: "I", teamName: "BRAIN BYTES" },
