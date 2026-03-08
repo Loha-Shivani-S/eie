@@ -18,6 +18,7 @@ const Navbar: React.FC = () => {
     { path: "/volunteers", label: "Volunteers", icon: UserCheck },
     { path: "/volunteers/absentees", label: "Absent (V)", icon: UserX },
     { path: "/manage-volunteers", label: "Manage Volunteers", icon: UserPlus },
+    { path: "/manage-participants", label: "Manage Participants", icon: Users },
   ];
 
   const isActive = (path: string) => location.pathname === path;

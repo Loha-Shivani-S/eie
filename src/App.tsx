@@ -12,6 +12,7 @@ import FaceCapturePage from "./pages/FaceCapturePage";
 import AbsenteesPage from "./pages/AbsenteesPage";
 import LoginPage from "./pages/LoginPage";
 import ManageVolunteersPage from "./pages/ManageVolunteersPage";
+import ManageParticipantsPage from "./pages/ManageParticipantsPage";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
@@ -73,6 +74,7 @@ const AppRoutes = () => {
                 <Route path="/volunteers" element={<AttendancePage type="volunteers" />} />
                 <Route path="/volunteers/absentees" element={<AbsenteesPage type="volunteers" />} />
                 <Route path="/manage-volunteers" element={<ManageVolunteersPage />} />
+                <Route path="/manage-participants" element={<ManageParticipantsPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AttendanceProvider>
