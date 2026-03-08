@@ -118,7 +118,7 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "25CSR096", name: "Hashwanth G", phoneNumber: "6380233707", department: "CSE", year: "I", teamName: "NOUVEAU" },
   { rollNo: "25CSR084", name: "Harini R", phoneNumber: "9486588210", department: "CSE", year: "I", teamName: "NOUVEAU" },
   { rollNo: "25EER082", name: "Pooja Sri", phoneNumber: "9944724449", department: "EEE", year: "I", teamName: "NOUVEAU" },
-  { rollNo: "25CSR246", name: "Ronny Hamilton M", phoneNumber: "7892325259", department: "CSE", year: "II", teamName: "NOUVEAU" },
+  { rollNo: "25CSR246", name: "Ronny Hamilton M", phoneNumber: "7892325259", department: "CSE", year: "I", teamName: "NOUVEAU" },
 
   // 20. THE TACT COOL
   { rollNo: "23CDR126", name: "Pridhega C", phoneNumber: "9994015901", department: "CSD", year: "III", teamName: "THE TACT COOL" },
@@ -140,23 +140,21 @@ export const PARTICIPANTS: Student[] = [
 
   // 23. LUMINEERS
   { rollNo: "25CSR047", name: "Dhanurithanyaa S", phoneNumber: "9788882555", department: "CSE", year: "I", teamName: "LUMINEERS" },
-  { rollNo: "25CSR018", name: "Anita S", phoneNumber: "9442754568", department: "CSE", year: "I", teamName: "LUMINEERS" },
+  { rollNo: "25CSR018", name: "Anitha S", phoneNumber: "9442754568", department: "CSE", year: "I", teamName: "LUMINEERS" },
   { rollNo: "25CSR045", name: "Dhanapriya S", phoneNumber: "8637404123", department: "CSE", year: "I", teamName: "LUMINEERS" },
   { rollNo: "25CSR056", name: "Dharshini S", phoneNumber: "99092043069", department: "CSE", year: "I", teamName: "LUMINEERS" },
 
-  // 24.
-  { rollNo: "24EIR016", name: "Chandresh P", phoneNumber: "8072347397", department: "EIE", year: "II" },
-  { rollNo: "24EIR017", name: "Chithra S", phoneNumber: "9788621198", department: "EIE", year: "II" },
-  { rollNo: "24EIR018", name: "Dhakshana R", phoneNumber: "9600417024", department: "EIE", year: "II" },
-  { rollNo: "24EIR032", name: "Gokul Nandha S", phoneNumber: "9629817427", department: "EIE", year: "II" },
+  // 24. EIE
+  { rollNo: "24EIR016", name: "Chandresh P", phoneNumber: "8072347397", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR017", name: "Chithra S", phoneNumber: "9788621198", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR018", name: "Dhakshana R", phoneNumber: "9600417024", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR032", name: "Gokul Nandha S", phoneNumber: "9629817427", department: "EIE", year: "II", teamName: "EIE" },
 
-  // 26.
-
-  // 26.
-  { rollNo: "24EIR037", name: "Hariharan S", phoneNumber: "7402799516", department: "EIE", year: "II" },
-  { rollNo: "24EIR038", name: "Haripraneetha M", phoneNumber: "8903585428", department: "EIE", year: "II" },
-  { rollNo: "24EIR028", name: "Ezhilan P V", phoneNumber: "9965911257", department: "EIE", year: "II" },
-  { rollNo: "24EIR039", name: "Hasika A", phoneNumber: "9080578009", department: "EIE", year: "II" },
+  // 25. EIE
+  { rollNo: "24EIR037", name: "Hariharan S", phoneNumber: "7402799516", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR038", name: "Haripraneetha M", phoneNumber: "8903585428", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR028", name: "Ezhilan P V", phoneNumber: "9965911257", department: "EIE", year: "II", teamName: "EIE" },
+  { rollNo: "24EIR039", name: "Hasika A", phoneNumber: "9080578009", department: "EIE", year: "II", teamName: "EIE" },
 ];
 
 // Volunteers / Club Members - replace with actual data later
