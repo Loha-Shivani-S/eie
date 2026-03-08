@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAttendance } from "@/lib/attendanceContext";
 import { useAuth } from "@/lib/authContext";
-import { Home, Users, UserCheck, UserX, Menu, X, ChevronLeft, ChevronRight, LogOut, ScanFace } from "lucide-react";
+import { Home, Users, UserCheck, UserX, Menu, X, ChevronLeft, ChevronRight, LogOut, ScanFace, UserPlus } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -17,6 +17,7 @@ const Navbar: React.FC = () => {
     { path: "/participants/absentees", label: "Absent (P)", icon: UserX },
     { path: "/volunteers", label: "Volunteers", icon: UserCheck },
     { path: "/volunteers/absentees", label: "Absent (V)", icon: UserX },
+    { path: "/manage-volunteers", label: "Manage Volunteers", icon: UserPlus },
   ];
 
   const isActive = (path: string) => location.pathname === path;

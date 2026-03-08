@@ -5,6 +5,7 @@ export interface Student {
   department: string;
   year: string;
   teamName?: string;
+  session?: number[];
 }
 
 // Actual Ideathon Participants from KEC EIE Department
@@ -157,14 +158,45 @@ export const PARTICIPANTS: Student[] = [
   { rollNo: "24EIR039", name: "Hasika A", phoneNumber: "9080578009", department: "EIE", year: "II", teamName: "EIE" },
 ];
 
-// Volunteers / Club Members - replace with actual data later
+// Volunteers / Club Members from CALIBRIX 2026 List
 export const VOLUNTEERS: Student[] = [
-  { rollNo: "22EI050", name: "Kavitha R", phoneNumber: "9876543220", department: "EIE", year: "IV" },
-  { rollNo: "22EI051", name: "Logesh M", phoneNumber: "9876543221", department: "EIE", year: "IV" },
-  { rollNo: "22EI052", name: "Meena S", phoneNumber: "9876543222", department: "EIE", year: "IV" },
-  { rollNo: "22EI053", name: "Naveen K", phoneNumber: "9876543223", department: "EIE", year: "IV" },
-  { rollNo: "22EI054", name: "Oviya P", phoneNumber: "9876543224", department: "EIE", year: "IV" },
-  { rollNo: "22EI055", name: "Priya V", phoneNumber: "9876543225", department: "EIE", year: "IV" },
-  { rollNo: "22EI056", name: "Ragul T", phoneNumber: "9876543226", department: "EIE", year: "IV" },
-  { rollNo: "22EI057", name: "Saranya M", phoneNumber: "9876543227", department: "EIE", year: "IV" },
+  // 9.00 AM TO 4.30 PM (Session A: Hours 1-4)
+  { rollNo: "24EIR011", name: "ASMA FARHA S", phoneNumber: "6374819375", department: "EIE", year: "II", session: [1, 2, 3, 4] },
+  { rollNo: "24EIR050", name: "KAUSHIKA E", phoneNumber: "9384888161", department: "EIE", year: "II", session: [1, 2, 3, 4] },
+  { rollNo: "24EIR104", name: "THANMATHI H T", phoneNumber: "9443946200", department: "EIE", year: "II", session: [1, 2, 3, 4] },
+  { rollNo: "24EIR021", name: "DHARANI DHARAN M", phoneNumber: "9943190765", department: "EIE", year: "II", session: [1, 2, 3, 4] },
+
+  // 4.30 PM TO 9.00 PM (Session B: Hours 5-6)
+  { rollNo: "23EIR111", name: "THARUNKUMAR D", phoneNumber: "9047323169", department: "EIE", year: "III", session: [5, 6] },
+  { rollNo: "23EIR109", name: "THAMARAISELVAN K", phoneNumber: "9025476154", department: "EIE", year: "III", session: [5, 6] },
+
+  // 4.30 PM TO 7.00 AM (Session C: Hours 5-9)
+  { rollNo: "23EIR007", name: "ARULVENTHAN G M", phoneNumber: "8122815659", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR077", name: "RISHIKESHWARAN M", phoneNumber: "9715708810", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR092", name: "SHAFEEK A", phoneNumber: "9342393529", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR066", name: "NANTHITHA N", phoneNumber: "9894063564", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR105", name: "SUBIKSHA R", phoneNumber: "9488807719", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR052", name: "LATHIKA S", phoneNumber: "8122337577", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR070", name: "PRABHASHINI", phoneNumber: "9361289677", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR108", name: "TANUSHRI V", phoneNumber: "9487203640", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+  { rollNo: "23EIR096", name: "SHREE VARSHINI V", phoneNumber: "9345605738", department: "EIE", year: "III", session: [5, 6, 7, 8, 9] },
+
+  // 24 HRS (Session D: Hours 1-10)
+  { rollNo: "22EIR030", name: "INIYAN C M", phoneNumber: "7010908944", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR017", name: "DHINESH R V", phoneNumber: "9791796867", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR042", name: "LAKSHITH S", phoneNumber: "7373898383", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR072", name: "SARAN C S", phoneNumber: "8608565243", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR083", name: "SIVASURIYA K", phoneNumber: "9894752411", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR067", name: "RAM GANESH S", phoneNumber: "9791760308", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR110", name: "YUVAN KARTHICK D", phoneNumber: "9597512950", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "22EIR039", name: "KIRUTHUKA M", phoneNumber: "8825540650", department: "EIE", year: "IV", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "23EIR004", name: "ABISHA CARIN D", phoneNumber: "9486067288", department: "EIE", year: "III", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "23EIR014", name: "BHAVATARINI S", phoneNumber: "9025239168", department: "EIE", year: "III", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "23EIR056", name: "MADHAVAN K", phoneNumber: "9042846606", department: "EIE", year: "III", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "23EIR035", name: "GOWSIKA P", phoneNumber: "9965051087", department: "EIE", year: "III", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "24EIR074", name: "PRATHISH C", phoneNumber: "9865193481", department: "EIE", year: "II", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "24EIR003", name: "ABISHEK A", phoneNumber: "8610961896", department: "EIE", year: "II", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "24EIR108", name: "TITIKSHA SENTHILKUMAR", phoneNumber: "8838508907", department: "EIE", year: "II", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "24EIR081", name: "RASIGASHRI E N", phoneNumber: "9361016493", department: "EIE", year: "II", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+  { rollNo: "24EIR070", name: "PRADEEP R", phoneNumber: "7094616885", department: "EIE", year: "II", session: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
 ];

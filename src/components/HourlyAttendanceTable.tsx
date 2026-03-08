@@ -44,40 +44,46 @@ const HourlyAttendanceTable: React.FC<HourlyAttendanceTableProps> = ({ type }) =
           </tr>
         </thead>
         <tbody>
-          {students.map((student, idx) => (
-            <tr key={student.rollNo} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
-              <td className="p-2.5 text-muted-foreground sticky left-0 bg-card z-10 text-xs">{idx + 1}</td>
-              <td className="p-2.5 font-medium text-card-foreground sticky left-8 bg-card z-10 text-xs whitespace-nowrap">
-                <div className="flex items-center gap-2">
-                  {student.name}
-                  {hasFaceRegistered(student.rollNo) && (
-                    <span title="Face Registered" className="flex items-center justify-center">
-                      <ScanFace className="w-3.5 h-3.5 text-success" />
-                    </span>
-                  )}
-                </div>
-              </td>
-              <td className="p-2.5 text-muted-foreground font-mono text-xs">{student.rollNo}</td>
-              {hours.map((h) => {
-                const present = isPresent(type, student.rollNo, h);
-                return (
-                  <td key={h} className="p-2 text-center">
-                    <button
-                      onClick={() => handleToggle(student.rollNo, h, present)}
-                      className="p-1 rounded-lg active:scale-90 transition-transform touch-manipulation"
-                      title={present ? `Unmark from Hour ${h}` : `Mark present for Hour ${h}`}
-                    >
-                      {present ? (
-                        <CheckCircle className="w-5 h-5 text-success mx-auto" />
-                      ) : (
-                        <XCircle className="w-5 h-5 text-destructive/25 mx-auto" />
-                      )}
-                    </button>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+          {students.map((student, idx) => {
+            const isVolunteer = type === "volunteers";
+            return (
+              <tr key={student.rollNo} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
+                <td className="p-2.5 text-muted-foreground sticky left-0 bg-card z-10 text-xs">{idx + 1}</td>
+                <td className="p-2.5 font-medium text-card-foreground sticky left-8 bg-card z-10 text-xs whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    {student.name}
+                    {hasFaceRegistered(student.rollNo) && (
+                      <span title="Face Registered" className="flex items-center justify-center">
+                        <ScanFace className="w-3.5 h-3.5 text-success" />
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="p-2.5 text-muted-foreground font-mono text-xs">{student.rollNo}</td>
+                {hours.map((h) => {
+                  const present = isPresent(type, student.rollNo, h);
+                  const isScheduled = isVolunteer ? (getStudentList("volunteers", h).some(v => v.rollNo === student.rollNo)) : true;
+                  
+                  return (
+                    <td key={h} className={`p-2 text-center ${!isScheduled ? "bg-muted/30" : ""}`}>
+                      <button
+                        onClick={() => isScheduled && handleToggle(student.rollNo, h, present)}
+                        disabled={!isScheduled}
+                        className={`p-1 rounded-lg active:scale-90 transition-transform touch-manipulation ${!isScheduled ? "opacity-20 cursor-not-allowed" : ""}`}
+                        title={!isScheduled ? "Not scheduled" : (present ? `Unmark from Hour ${h}` : `Mark present for Hour ${h}`)}
+                      >
+                        {present ? (
+                          <CheckCircle className="w-5 h-5 text-success mx-auto" />
+                        ) : (
+                          <XCircle className="w-5 h-5 text-destructive/25 mx-auto" />
+                        )}
+                      </button>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

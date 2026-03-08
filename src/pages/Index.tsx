@@ -8,7 +8,7 @@ const Index: React.FC = () => {
 
   const pTotal = getStudentList("participants").length;
   const pPresent = getPresentList("participants", currentHour).length;
-  const vTotal = getStudentList("volunteers").length;
+  const vTotal = getStudentList("volunteers", currentHour).length;
   const vPresent = getPresentList("volunteers", currentHour).length;
 
   return (

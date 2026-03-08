@@ -179,7 +179,7 @@ const FaceCapturePage: React.FC = () => {
     setCapturing(false);
   };
 
-  const students = getStudentList(type);
+  const students = getStudentList(type); // Full list for face registration
   const capturedCount = students.filter((s) => capturedRolls.has(s.rollNo.toLowerCase())).length;
 
   return (

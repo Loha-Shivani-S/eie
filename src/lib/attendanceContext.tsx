@@ -14,7 +14,7 @@ interface AttendanceRecord {
 
 interface AttendanceContextType {
   records: Record<string, AttendanceRecord>;
-  getStudentList: (type: AttendanceType) => Student[];
+  getStudentList: (type: AttendanceType, hour?: number) => Student[];
   findStudent: (type: AttendanceType, rollNo: string) => Student | undefined;
   markPresent: (type: AttendanceType, rollNo: string, hour: number) => Promise<{ success: boolean; message: string }>;
   unmarkPresent: (type: AttendanceType, rollNo: string, hour: number) => Promise<{ success: boolean; message: string }>;
@@ -29,6 +29,9 @@ interface AttendanceContextType {
   getHourDetails: (hour: number) => { date: string; time: string };
   loading: boolean;
   refreshRecords: () => Promise<void>;
+  refreshStudents: () => Promise<void>;
+  upsertStudent: (student: Omit<Student, "id">, type: AttendanceType) => Promise<{ success: boolean; message: string }>;
+  deleteStudent: (rollNo: string, type: AttendanceType) => Promise<{ success: boolean; message: string }>;
   hasFaceRegistered: (rollNo: string) => boolean;
 }
 
@@ -99,22 +102,18 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     }
     const { data, error } = await supabase.from("students").select("*");
     if (!error && data && data.length > 0) {
-      const p: Student[] = [];
-      const v: Student[] = [];
-      data.forEach((s: any) => {
-        const student: Student = {
-          rollNo: s.roll_no,
-          name: s.name,
-          phoneNumber: s.phone_number,
-          department: s.department,
-          year: s.year,
-          teamName: s.team_name,
-        };
-        if (s.type === "participant") p.push(student);
-        else v.push(student);
-      });
-      setParticipants(p);
-      setVolunteers(v);
+      const mapped = data.map((s: any) => ({
+        id: s.id,
+        rollNo: s.roll_no,
+        name: s.name,
+        phoneNumber: s.phone_number,
+        department: s.department,
+        year: s.year,
+        teamName: s.team_name,
+        session: s.session ? JSON.parse(s.session) : undefined
+      }));
+      setParticipants(mapped.filter((s: any) => data.find((d: any) => d.id === s.id).type === "participant"));
+      setVolunteers(mapped.filter((s: any) => data.find((d: any) => d.id === s.id).type === "volunteer"));
     } else {
       // Fallback to mock data if table is empty or doesn't exist yet
       setParticipants(PARTICIPANTS);
@@ -152,8 +151,17 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     return () => { supabase.removeChannel(channel); };
   }, [user, fetchRecords]);
 
-  const getStudentList = useCallback((type: AttendanceType): Student[] => {
-    return type === "participants" ? participants : volunteers;
+  const isVolunteerInSession = (student: Student, hour: number) => {
+    if (!student.session) return true; // Default for participants
+    return student.session.includes(hour);
+  };
+
+  const getStudentList = useCallback((type: AttendanceType, hour?: number): Student[] => {
+    const list = type === "participants" ? participants : volunteers;
+    if (type === "volunteers" && hour !== undefined) {
+      return list.filter(v => isVolunteerInSession(v, hour));
+    }
+    return list;
   }, [participants, volunteers]);
 
   const findStudent = useCallback((type: AttendanceType, rollNo: string): Student | undefined => {
@@ -167,6 +175,11 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
       if (!student) {
         return { success: false, message: "Student not found in database!" };
       }
+      
+      if (type === "volunteers" && !isVolunteerInSession(student, hour)) {
+        return { success: false, message: `${student.name} is not scheduled for Hour ${hour}!` };
+      }
+
       const key = makeKey(type, rollNo, hour);
       if (records[key]) {
         return { success: false, message: `${student.name} (${student.rollNo}) is already marked as present for Hour ${hour}!` };
@@ -229,7 +242,7 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
 
   const getPresentList = useCallback(
     (type: AttendanceType, hour: number): Student[] => {
-      const list = getStudentList(type);
+      const list = getStudentList(type, hour);
       return list.filter((s) => isPresent(type, s.rollNo, hour));
     },
     [getStudentList, isPresent]
@@ -237,7 +250,7 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
 
   const getAbsentList = useCallback(
     (type: AttendanceType, hour: number): Student[] => {
-      const list = getStudentList(type);
+      const list = getStudentList(type, hour);
       return list.filter((s) => !isPresent(type, s.rollNo, hour));
     },
     [getStudentList, isPresent]
@@ -247,9 +260,48 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     return faceRegisteredRolls.has(rollNo.toLowerCase());
   }, [faceRegisteredRolls]);
 
-    const getHourDetails = useCallback((hour: number) => {
+  const getHourDetails = useCallback((hour: number) => {
     return HOUR_SCHEDULE[hour] || { date: HACKATHON_DATE, time: `Hour ${hour}` };
   }, []);
+
+  const upsertStudent = useCallback(
+    async (student: Omit<Student, "id">, type: AttendanceType) => {
+      const dbType = type === "participants" ? "participant" : "volunteer";
+      const { error } = await supabase
+        .from("students")
+        .upsert({
+          roll_no: student.rollNo,
+          name: student.name,
+          phone_number: student.phoneNumber,
+          department: student.department,
+          year: student.year,
+          team_name: student.teamName,
+          type: dbType,
+          session: student.session ? JSON.stringify(student.session) : null,
+        }, { onConflict: 'roll_no,type' });
+
+      if (error) return { success: false, message: error.message };
+      await fetchStudents();
+      return { success: true, message: "Student updated successfully!" };
+    },
+    [fetchStudents]
+  );
+
+  const deleteStudent = useCallback(
+    async (rollNo: string, type: AttendanceType) => {
+      const dbType = type === "participants" ? "participant" : "volunteer";
+      const { error } = await supabase
+        .from("students")
+        .delete()
+        .eq("roll_no", rollNo)
+        .eq("type", dbType);
+
+      if (error) return { success: false, message: error.message };
+      await fetchStudents();
+      return { success: true, message: "Student deleted successfully!" };
+    },
+    [fetchStudents]
+  );
 
   return (
     <AttendanceContext.Provider
@@ -270,6 +322,9 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
         getHourDetails,
         loading,
         refreshRecords: fetchRecords,
+        refreshStudents: fetchStudents,
+        upsertStudent,
+        deleteStudent,
         hasFaceRegistered,
       }}
     >
