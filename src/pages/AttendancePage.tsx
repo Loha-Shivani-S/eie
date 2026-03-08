@@ -11,12 +11,14 @@ interface AttendancePageProps {
 }
 
 const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
-  const { getPresentList, getAbsentList, currentHour, hours, hackathonDate, getHourDetails } = useAttendance();
+  const { getPresentList, getAbsentList, getStudentList, currentHour, hours, hackathonDate, getHourDetails } = useAttendance();
   const [mode, setMode] = useState<"manual" | "face">("manual");
   const hourDetails = getHourDetails(currentHour);
   const title = type === "participants" ? "Participants" : "Volunteers";
+  const total = getStudentList(type).length;
   const presentCount = getPresentList(type, currentHour).length;
   const absentCount = getAbsentList(type, currentHour).length;
+  const scheduledCount = type === "volunteers" ? (presentCount + absentCount) : total;
 
   const handleExportCurrentHour = () => {
     const now = new Date();
@@ -43,6 +45,9 @@ const AttendancePage: React.FC<AttendancePageProps> = ({ type }) => {
           </span>
           <span className="text-success font-medium">{presentCount} present</span>
           <span className="text-destructive font-medium">{absentCount} absent</span>
+          {type === "volunteers" && (
+            <span className="text-muted-foreground text-xs font-medium">({scheduledCount} of {total} scheduled)</span>
+          )}
         </div>
       </div>
 

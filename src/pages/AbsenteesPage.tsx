@@ -7,9 +7,11 @@ interface AbsenteesPageProps {
 }
 
 const AbsenteesPage: React.FC<AbsenteesPageProps> = ({ type }) => {
-  const { getAbsentList, currentHour } = useAttendance();
+  const { getAbsentList, getStudentList, currentHour } = useAttendance();
   const title = type === "participants" ? "Participants" : "Volunteers";
   const absentees = getAbsentList(type, currentHour);
+  const total = getStudentList(type).length;
+  const scheduled = type === "volunteers" ? getStudentList(type, currentHour).length : total;
 
   return (
     <div className="px-3 sm:px-6 py-4 space-y-4 max-w-screen-xl mx-auto">
@@ -20,6 +22,9 @@ const AbsenteesPage: React.FC<AbsenteesPageProps> = ({ type }) => {
             Hour {currentHour}
           </span>
           <span className="text-sm text-destructive font-medium">{absentees.length} absent</span>
+          {type === "volunteers" && scheduled !== total && (
+            <span className="text-xs text-muted-foreground">({scheduled} of {total} scheduled this hour)</span>
+          )}
         </div>
       </div>
 
