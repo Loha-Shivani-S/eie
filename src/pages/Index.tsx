@@ -8,7 +8,8 @@ const Index: React.FC = () => {
 
   const pTotal = getStudentList("participants").length;
   const pPresent = getPresentList("participants", currentHour).length;
-  const vTotal = getStudentList("volunteers", currentHour).length;
+  const vTotal = getStudentList("volunteers").length;
+  const vScheduled = getStudentList("volunteers", currentHour).length;
   const vPresent = getPresentList("volunteers", currentHour).length;
 
   return (
@@ -28,8 +29,8 @@ const Index: React.FC = () => {
       <div className="grid grid-cols-2 gap-3">
         <StatCard label="Participants" value={pTotal} sub={`${pPresent} present`} />
         <StatCard label="Absent (P)" value={pTotal - pPresent} sub="this hour" color="destructive" />
-        <StatCard label="Volunteers" value={vTotal} sub={`${vPresent} present`} />
-        <StatCard label="Absent (V)" value={vTotal - vPresent} sub="this hour" color="destructive" />
+        <StatCard label="Volunteers" value={vTotal} sub={`${vPresent}/${vScheduled} present`} />
+        <StatCard label="Absent (V)" value={vScheduled - vPresent} sub="scheduled" color="destructive" />
       </div>
 
       <div className="space-y-3">
@@ -52,7 +53,7 @@ const Index: React.FC = () => {
           icon={UserCheck}
           title="Volunteers"
           desc="Mark attendance"
-          stat={`${vPresent}/${vTotal}`}
+          stat={`${vPresent}/${vScheduled}`}
         />
         <QuickLink
           href="/participants/absentees"
@@ -67,7 +68,7 @@ const Index: React.FC = () => {
           icon={ClipboardList}
           title="Absent Volunteers"
           desc="View & call"
-          stat={`${vTotal - vPresent}`}
+          stat={`${vScheduled - vPresent}`}
           variant="destructive"
         />
       </div>
