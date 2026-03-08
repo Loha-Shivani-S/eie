@@ -1,4 +1,5 @@
 export interface Student {
+  id?: string;
   rollNo: string;
   name: string;
   phoneNumber: string;

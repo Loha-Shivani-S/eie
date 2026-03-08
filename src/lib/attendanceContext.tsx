@@ -102,18 +102,30 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
     }
     const { data, error } = await supabase.from("students").select("*");
     if (!error && data && data.length > 0) {
-      const mapped = data.map((s: any) => ({
-        id: s.id,
-        rollNo: s.roll_no,
-        name: s.name,
-        phoneNumber: s.phone_number,
-        department: s.department,
-        year: s.year,
-        teamName: s.team_name,
-        session: s.session ? JSON.parse(s.session) : undefined
-      }));
-      setParticipants(mapped.filter((s: any) => data.find((d: any) => d.id === s.id).type === "participant"));
-      setVolunteers(mapped.filter((s: any) => data.find((d: any) => d.id === s.id).type === "volunteer"));
+      const pStudents: Student[] = [];
+      const vStudents: Student[] = [];
+      
+      data.forEach((s: any) => {
+        const mappedStudent: Student = {
+          id: s.id,
+          rollNo: s.roll_no,
+          name: s.name,
+          phoneNumber: s.phone_number,
+          department: s.department,
+          year: s.year,
+          teamName: s.team_name,
+          session: s.session ? JSON.parse(s.session) : undefined
+        };
+        
+        if (s.type === "participant") {
+          pStudents.push(mappedStudent);
+        } else if (s.type === "volunteer") {
+          vStudents.push(mappedStudent);
+        }
+      });
+      
+      setParticipants(pStudents);
+      setVolunteers(vStudents);
     } else {
       // Fallback to mock data if table is empty or doesn't exist yet
       setParticipants(PARTICIPANTS);
@@ -281,7 +293,27 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
         }, { onConflict: 'roll_no,type' });
 
       if (error) return { success: false, message: error.message };
-      await fetchStudents();
+
+      // Update local state instead of full re-fetch
+      const updatedStudent: Student = {
+        ...student,
+        id: (type === "participants" ? participants : volunteers).find(s => s.rollNo === student.rollNo)?.id || Math.random().toString()
+      };
+
+      if (type === "participants") {
+        setParticipants(prev => {
+          const exists = prev.some(s => s.rollNo === student.rollNo);
+          if (exists) return prev.map(s => s.rollNo === student.rollNo ? updatedStudent : s);
+          return [...prev, updatedStudent];
+        });
+      } else {
+        setVolunteers(prev => {
+          const exists = prev.some(s => s.rollNo === student.rollNo);
+          if (exists) return prev.map(s => s.rollNo === student.rollNo ? updatedStudent : s);
+          return [...prev, updatedStudent];
+        });
+      }
+
       return { success: true, message: "Student updated successfully!" };
     },
     [fetchStudents]
@@ -297,7 +329,13 @@ export const AttendanceProvider: React.FC<{ children: ReactNode }> = ({ children
         .eq("type", dbType);
 
       if (error) return { success: false, message: error.message };
-      await fetchStudents();
+      
+      if (type === "participants") {
+        setParticipants(prev => prev.filter(s => s.rollNo !== rollNo));
+      } else {
+        setVolunteers(prev => prev.filter(s => s.rollNo !== rollNo));
+      }
+
       return { success: true, message: "Student deleted successfully!" };
     },
     [fetchStudents]
